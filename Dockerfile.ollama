@@ -1,0 +1,22 @@
+# Use Python 3.12-slim as the base image
+FROM python:3.12-slim
+
+# Install necessary dependencies for Ollama
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download and install Ollama using the official script
+RUN curl -fsSL https://ollama.com/install.sh | sh
+
+# Set the working directory
+WORKDIR /app
+
+# Expose the Ollama port
+EXPOSE 11434
+
+# Set the entrypoint to run Ollama
+ENTRYPOINT ["/usr/local/bin/ollama"]
+CMD ["serve"]
+# docker run -d --gpus=all -v /home/austin/disk2/ollama_data:/root/.ollama -p 11434:11434 --name ollama-python ollama-python3.12-slim
